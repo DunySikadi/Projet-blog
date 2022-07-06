@@ -1,5 +1,6 @@
 import "./assets/styles/styles.scss";
 import "./index.scss";
+import { openModal } from "./assets/javascript/modal"; 
 
 const articleContainerElement = document.querySelector(".articles-container");
 const categoriesContainerElement = document.querySelector(".categories");
@@ -50,6 +51,7 @@ const createArticles = () => {
   articleContainerElement.append(...articlesDOM);
   const deleteButtons = articleContainerElement.querySelectorAll(".btn-danger");
   const editButtons = articleContainerElement.querySelectorAll(".btn-primary");
+
   editButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       const target = event.target;
@@ -60,7 +62,9 @@ const createArticles = () => {
   });
   deleteButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
-      try {
+      const result = await openModal('Etes vous sure de vouloir supprimer votre article?');
+      if(result === true){
+        try {
         const target = event.target;
         const articleId = target.dataset.id;
         const response = await fetch(
@@ -74,6 +78,7 @@ const createArticles = () => {
         fetchArticle();
       } catch (e) {
         console.log("e : ", e);
+      }
       }
     });
   });
